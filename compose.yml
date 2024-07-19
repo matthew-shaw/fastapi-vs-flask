@@ -2,6 +2,9 @@ services:
   fastapi:
     container_name: FastAPI
     build: ./fastapi
+    command: fastapi dev main.py
+    ports:
+      - 8000:8000
   flask:
     container_name: Flask
     build: ./flask
