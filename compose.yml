@@ -5,3 +5,6 @@ services:
   flask:
     container_name: Flask
     build: ./flask
+    command: gunicorn -b :5001 --access-logfile - --error-logfile - flask_app:app
+    ports:
+      - 5001:5001
