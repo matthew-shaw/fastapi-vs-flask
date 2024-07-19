@@ -16,8 +16,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements_dev.txt
+        pip install -r fastapi/requirements.txt
+        pip install -r flask/requirements.txt
     - name: Requirements
-      run: pip-audit
+      run: | 
+        pip-audit -r fastapi/requirements.txt
+        pip-audit -r flask/requirements.txt
     - name: Security
       run: bandit -r .
     - name: Typing
