@@ -1,0 +1,7 @@
+services:
+  fastapi:
+    container_name: FastAPI
+    build: ./fastapi
+  flask:
+    container_name: Flask
+    build: ./flask
