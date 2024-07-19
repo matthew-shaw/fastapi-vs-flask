@@ -1,0 +1,11 @@
+bandit
+black
+flake8-bugbear
+isort
+mypy
+pep8-naming
+pip-audit
+pip-tools
+pur
+pytest-cov
+types-jsonschema

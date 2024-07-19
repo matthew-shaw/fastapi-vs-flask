@@ -1,0 +1,30 @@
+name: Lint
+
+on: [push]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12" 
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements_dev.txt
+    - name: Requirements
+      run: pip-audit
+    - name: Security
+      run: bandit -r .
+    - name: Typing
+      run: mypy .
+    - name: Formatting
+      run: black . -t py312 -l 120 --check
+    - name: Imports
+      run: isort . --check
+    - name: Style
+      run: flake8 .
