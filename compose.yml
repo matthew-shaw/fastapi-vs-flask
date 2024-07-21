@@ -5,9 +5,21 @@ services:
     command: fastapi dev main.py
     ports:
       - 8000:8000
+    depends_on:
+      - db
   flask:
     container_name: Flask
     build: ./flask
     command: gunicorn -b :5001 --access-logfile - --error-logfile - flask_app:app
     ports:
       - 5001:5001
+    depends_on:
+      - db
+  db:
+    container_name: PostgreSQL
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
+      POSTGRES_DB: experiment
