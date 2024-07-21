@@ -10,6 +10,8 @@ bandit==1.7.9
     # via -r requirements_dev.in
 black==24.4.2
     # via -r requirements_dev.in
+blinker==1.8.2
+    # via flask
 boolean-py==4.0
     # via license-expression
 build==1.2.1
@@ -25,6 +27,7 @@ charset-normalizer==3.3.2
 click==8.1.7
     # via
     #   black
+    #   flask
     #   pip-tools
     #   pur
 coverage[toml]==7.6.0
@@ -41,6 +44,14 @@ flake8==7.1.0
     #   pep8-naming
 flake8-bugbear==24.4.26
     # via -r requirements_dev.in
+flask==3.0.3
+    # via
+    #   flask-sqlalchemy
+    #   types-flask-migrate
+flask-sqlalchemy==3.1.1
+    # via types-flask-migrate
+greenlet==3.0.3
+    # via sqlalchemy
 html5lib==1.1
     # via pip-audit
 idna==3.7
@@ -49,10 +60,18 @@ iniconfig==2.0.0
     # via pytest
 isort==5.13.2
     # via -r requirements_dev.in
+itsdangerous==2.2.0
+    # via flask
+jinja2==3.1.4
+    # via flask
 license-expression==30.3.0
     # via cyclonedx-python-lib
 markdown-it-py==3.0.0
     # via rich
+markupsafe==2.1.5
+    # via
+    #   jinja2
+    #   werkzeug
 mccabe==0.7.0
     # via flake8
 mdurl==0.1.2
@@ -108,7 +127,7 @@ pyproject-hooks==1.1.0
     # via
     #   build
     #   pip-tools
-pytest==8.2.2
+pytest==8.3.1
     # via pytest-cov
 pytest-cov==5.0.0
     # via -r requirements_dev.in
@@ -126,16 +145,24 @@ six==1.16.0
     # via html5lib
 sortedcontainers==2.4.0
     # via cyclonedx-python-lib
+sqlalchemy==2.0.31
+    # via flask-sqlalchemy
 stevedore==5.2.0
     # via bandit
 toml==0.10.2
     # via pip-audit
+types-flask-migrate==4.0.0.20240311
+    # via -r requirements_dev.in
 typing-extensions==4.12.2
-    # via mypy
+    # via
+    #   mypy
+    #   sqlalchemy
 urllib3==2.2.2
     # via requests
 webencodings==0.5.1
     # via html5lib
+werkzeug==3.0.3
+    # via flask
 wheel==0.43.0
     # via pip-tools
 
