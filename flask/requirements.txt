@@ -4,23 +4,47 @@
 #
 #    pip-compile flask/requirements.in
 #
+alembic==1.13.2
+    # via flask-migrate
 blinker==1.8.2
     # via flask
 click==8.1.7
     # via flask
 flask==3.0.3
+    # via
+    #   -r flask/requirements.in
+    #   flask-migrate
+    #   flask-sqlalchemy
+flask-migrate==4.0.7
     # via -r flask/requirements.in
+flask-sqlalchemy==3.1.1
+    # via
+    #   -r flask/requirements.in
+    #   flask-migrate
+greenlet==3.0.3
+    # via sqlalchemy
 gunicorn==22.0.0
     # via -r flask/requirements.in
 itsdangerous==2.2.0
     # via flask
 jinja2==3.1.4
     # via flask
+mako==1.3.5
+    # via alembic
 markupsafe==2.1.5
     # via
     #   jinja2
+    #   mako
     #   werkzeug
 packaging==24.1
     # via gunicorn
+sqlalchemy==2.0.31
+    # via
+    #   alembic
+    #   flask-sqlalchemy
+typing-extensions==4.12.2
+    # via
+    #   alembic
+    #   sqlalchemy
 werkzeug==3.0.3
     # via flask
