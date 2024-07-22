@@ -16,11 +16,12 @@ docker compose up --build
 flowchart TB
     client(Client):::C
     subgraph Docker compose
-        app1(FastAPI App):::A --> db1[(PostgreSQL)]:::D
-        app2(Flask App):::A --> db2[(PostgreSQL)]:::D
+        app1(FastAPI App):::A
+        app2(Flask App):::A
+        db[(PostgreSQL)]:::D
     end
 
-    client -- http --> app1 & app2
+    client -- http --> app1 & app2 --> db
 
     classDef A fill:#DAE8FC,stroke:#6C8EBF,stroke-width:2px
     classDef D fill:#F8CECC,stroke:#B85450,stroke-width:2px
