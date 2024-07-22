@@ -38,6 +38,8 @@ markupsafe==2.1.5
     #   werkzeug
 packaging==24.1
     # via gunicorn
+psycopg2==2.9.9
+    # via -r flask/requirements.in
 sqlalchemy==2.0.31
     # via
     #   alembic
