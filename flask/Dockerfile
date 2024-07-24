@@ -4,13 +4,16 @@ RUN useradd appuser
 
 WORKDIR /home/appuser
 
+RUN apt-get update && \
+    apt-get install -y libpq-dev gcc
+
 # Set environment variables
 ENV FLASK_APP=flask_app.py \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 COPY app app
-COPY flask_app.py requirements.txt ./
+COPY flask_app.py config.py requirements.txt ./
 RUN pip install -r requirements.txt \
     && chown -R appuser:appuser ./
 
