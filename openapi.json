@@ -1,66 +1,104 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "",
-    "version": ""
+    "title": "Thing API",
+    "version": "1.0.0"
   },
-  "paths": {
-    "/v1/things": {
-      "post": {
-        "tags": ["Thing"],
-        "summary": "Create thing",
-        "operationId": "createThing",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewThingRequest"
-              }
-            }
-          },
-          "required": true
+  "externalDocs": {
+    "url": "https://github.com/matthew-shaw/fastapi-vs-flask",
+    "description": "GitHub"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:{port}/{version}",
+      "description": "Local",
+      "variables": {
+        "port": {
+          "default": "5000"
         },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Thing"
-                }
-              }
+        "version": {
+          "default": "v1"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "Thing",
+      "description": "Operations on the Thing resource"
+    }
+  ],
+  "paths": {
+    "/things": {
+      "get": {
+        "summary": "Retrieve a list of things",
+        "operationId": "list_things",
+        "tags": ["Thing"],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Name to filter by",
+            "required": false,
+            "example": "Apple",
+            "schema": {
+              "type": "string"
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
+          {
+            "name": "colour",
+            "in": "query",
+            "description": "Colour to filter by",
+            "required": false,
+            "example": "red",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "red",
+                "green",
+                "blue",
+                "yellow",
+                "orange",
+                "purple",
+                "black",
+                "white"
+              ]
             }
           },
-          "415": {
-            "description": "Unsupported Media Type",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
+          {
+            "name": "quantity",
+            "in": "query",
+            "description": "Quantity to filter by",
+            "required": false,
+            "example": 4,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Attribute to sort on",
+            "required": true,
+            "example": "created_at",
+            "schema": {
+              "type": "string",
+              "enum": ["name", "colour", "quantity", "created_at", "updated_at"]
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "Order of sorted attribute",
+            "required": true,
+            "example": "desc",
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"]
             }
           }
-        },
-        "deprecated": false,
-        "security": []
-      },
-      "get": {
-        "tags": ["Thing"],
-        "summary": "Get all things",
-        "operationId": "getAllThings",
-        "parameters": [],
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -69,33 +107,88 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Thing"
+                    "$ref": "#/components/schemas/ThingResponse"
                   }
                 }
               }
             }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "405": {
+            "description": "Method not allowed"
+          },
+          "415": {
+            "description": "Unsupported media type"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a thing",
+        "operationId": "create_thing",
+        "tags": ["Thing"],
+        "requestBody": {
+          "description": "New thing data to create",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ThingRequest"
+              }
+            }
           }
         },
-        "deprecated": false,
-        "security": []
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThingResponse"
+                }
+              }
+            },
+            "headers": {
+              "Location": {
+                "description": "URL of the new thing",
+                "schema": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "405": {
+            "description": "Method not allowed"
+          },
+          "406": {
+            "description": "Not acceptable"
+          },
+          "415": {
+            "description": "Unsupported media type"
+          }
+        }
       }
     },
-    "/v1/things/{thingId}": {
+    "/things/{thing_id}": {
       "get": {
+        "summary": "Retrieve a thing",
+        "operationId": "get_thing",
         "tags": ["Thing"],
-        "summary": "Get thing",
-        "operationId": "getThingById",
         "parameters": [
           {
-            "name": "thingId",
+            "name": "thing_id",
             "in": "path",
-            "description": "Thing ID",
+            "description": "ID of the thing to retrieve",
             "required": true,
-            "deprecated": false,
-            "allowEmptyValue": false,
+            "example": "d9ecd6ee-3ab8-473b-9585-bc653024bed9",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -105,62 +198,46 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Thing"
+                  "$ref": "#/components/schemas/ThingResponse"
                 }
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+          "405": {
+            "description": "Method not allowed"
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+          "415": {
+            "description": "Unsupported media type"
           }
-        },
-        "deprecated": false,
-        "security": []
+        }
       },
       "put": {
+        "summary": "Update a thing",
+        "operationId": "update_thing",
         "tags": ["Thing"],
-        "summary": "Update thing",
-        "operationId": "updateThing",
         "parameters": [
           {
-            "name": "thingId",
+            "name": "thing_id",
             "in": "path",
-            "description": "Thing ID",
+            "description": "ID of the thing to update",
             "required": true,
-            "deprecated": false,
-            "allowEmptyValue": false,
+            "example": "d9ecd6ee-3ab8-473b-9585-bc653024bed9",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
         "requestBody": {
+          "description": "Thing data to update",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewThingRequest"
+                "$ref": "#/components/schemas/ThingRequest"
               }
             }
-          },
-          "required": false
+          }
         },
         "responses": {
           "200": {
@@ -168,128 +245,127 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Thing"
+                  "$ref": "#/components/schemas/ThingResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+            "description": "Bad request"
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+          "405": {
+            "description": "Method not allowed"
+          },
+          "406": {
+            "description": "Not acceptable"
+          },
+          "415": {
+            "description": "Unsupported media type"
           }
-        },
-        "deprecated": false,
-        "security": []
+        }
       },
       "delete": {
+        "summary": "Delete a thing",
+        "operationId": "delete_thing",
         "tags": ["Thing"],
-        "summary": "Delete thing",
-        "operationId": "deleteThing",
         "parameters": [
           {
-            "name": "thingId",
+            "name": "thing_id",
             "in": "path",
-            "description": "Thing ID",
+            "description": "ID of the thing to delete",
             "required": true,
-            "deprecated": false,
-            "allowEmptyValue": false,
+            "example": "d9ecd6ee-3ab8-473b-9585-bc653024bed9",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
         "responses": {
           "204": {
-            "description": "No Content"
+            "description": "No content"
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+          "405": {
+            "description": "Method not allowed"
           }
-        },
-        "deprecated": false,
-        "security": []
+        }
       }
     }
   },
   "components": {
     "schemas": {
-      "ErrorResponse": {
+      "ThingRequest": {
         "type": "object",
-        "additionalProperties": false,
+        "required": ["name", "colour", "quantity"],
         "properties": {
-          "error_message": {
-            "type": "string"
+          "name": {
+            "type": "string",
+            "example": "Apple",
+            "maxLength": 32
           },
-          "error_code": {
-            "type": "string"
+          "colour": {
+            "type": "string",
+            "enum": [
+              "red",
+              "green",
+              "blue",
+              "yellow",
+              "orange",
+              "purple",
+              "black",
+              "white"
+            ]
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "example": 4
           }
         }
       },
-      "NewThingRequest": {
+      "ThingResponse": {
         "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "number_of_things": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "required": ["name", "number_of_things"]
-      },
-      "Thing": {
-        "type": "object",
-        "additionalProperties": false,
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "format": "uuid",
+            "example": "d9ecd6ee-3ab8-473b-9585-bc653024bed9"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "example": "Apple",
+            "maxLength": 32
           },
-          "number_of_things": {
+          "colour": {
+            "type": "string",
+            "enum": [
+              "red",
+              "green",
+              "blue",
+              "yellow",
+              "orange",
+              "purple",
+              "black",
+              "white"
+            ]
+          },
+          "quantity": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "example": 4
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2021-04-20T22:04:51.583801+01:00"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2021-04-20T22:16:57.492478+01:00"
           }
-        },
-        "required": ["id", "name", "number_of_things"]
+        }
       }
     }
   }
