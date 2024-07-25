@@ -13,6 +13,7 @@ ENV FLASK_APP=flask_app.py \
     PYTHONUNBUFFERED=1
 
 COPY app app
+COPY migrations migrations
 COPY flask_app.py config.py requirements.txt ./
 RUN pip install -r requirements.txt \
     && chown -R appuser:appuser ./
