@@ -12,10 +12,12 @@ ENV FLASK_APP=flask_app.py \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-COPY app app
-COPY migrations migrations
 COPY flask_app.py config.py requirements.txt ./
-RUN pip install -r requirements.txt \
-    && chown -R appuser:appuser ./
+RUN pip install -r requirements.txt
+
+COPY migrations migrations
+COPY app app
+
+RUN chown -R appuser:appuser ./
 
 USER appuser
