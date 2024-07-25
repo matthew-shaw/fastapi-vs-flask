@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timezone
 from enum import StrEnum, auto
 
@@ -28,3 +29,16 @@ class Thing(db.Model):
         default=lambda: datetime.now(timezone.utc),
     )
     updated_at: so.Mapped[datetime] = so.mapped_column(sa.DateTime, index=True, nullable=True)
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "colour": self.colour,
+            "quantity": self.quantity,
+            "created_at": self.created_at.isoformat(),
+            "updated_at": (self.updated_at.isoformat() if self.updated_at else None),
+        }
+
+    def __repr__(self) -> str:
+        return json.dumps(self.to_dict(), separators=(",", ":"))
