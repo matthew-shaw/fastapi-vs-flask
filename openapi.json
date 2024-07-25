@@ -301,7 +301,7 @@
           "name": {
             "type": "string",
             "example": "Apple",
-            "maxLength": 32
+            "maxLength": 64
           },
           "colour": {
             "type": "string",
@@ -334,7 +334,7 @@
           "name": {
             "type": "string",
             "example": "Apple",
-            "maxLength": 32
+            "maxLength": 64
           },
           "colour": {
             "type": "string",
