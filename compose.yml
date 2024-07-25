@@ -1,35 +1,46 @@
 services:
-  fastapi:
-    container_name: FastAPI
-    build: ./fastapi
-    command: fastapi dev main.py
-    ports:
-      - 8000:8000
-    depends_on:
-      - fastapi-db
+  # fastapi:
+  #   build: ./fastapi
+  #   command: fastapi dev main.py
+  #   ports:
+  #     - 8000:8000
+  #   networks:
+  #     - fastapi-network
+  #   depends_on:
+  #     - fastapi-db
+  #   volumes:
+  #     - ./fastapi:/home/appuser
   flask:
-    container_name: Flask
     build: ./flask
     command: gunicorn -b :5000 --access-logfile - --error-logfile - flask_app:app
     ports:
       - 5000:5000
+    networks:
+      - flask-network
     depends_on:
       - flask-db
     environment:
-      - DATABASE_URL=postgresql://flask_db_user:flask_db_password@db:5432/flask_db
-  fastapi-db:
-    container_name: FastAPI-Database
-    image: postgres:16-alpine
-    restart: always
-    environment:
-      POSTGRES_USER: fastapi_db_user
-      POSTGRES_PASSWORD: fastapi_db_password
-      POSTGRES_DB: fastapi_db
+      - DATABASE_URL=postgresql://db_user:db_password@flask-db:5432/experiment
+  # fastapi-db:
+  #   image: postgres:16-alpine
+  #   restart: always
+  #   networks:
+  #     - fastapi-network
+  #   environment:
+  #     POSTGRES_USER: db_user
+  #     POSTGRES_PASSWORD: db_password
+  #     POSTGRES_DB: experiment
   flask-db:
-    container_name: Flask-Database
     image: postgres:16-alpine
     restart: always
+    ports:
+      - 5432:5432
+    networks:
+      - flask-network
     environment:
-      POSTGRES_USER: flask_db_user
-      POSTGRES_PASSWORD: flask_db_password
-      POSTGRES_DB: flask_db
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
+      POSTGRES_DB: experiment
+networks:
+  fastapi-network:
+  flask-network:
