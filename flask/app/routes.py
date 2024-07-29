@@ -21,7 +21,11 @@ def create_thing():
         validate(instance=request.json, schema=thing_schema)
     except ValidationError as e:
         error = {"message": e.message}
-        return Response(response=json.dumps(error, separators=(",", ":")), mimetype="application/json", status=400)
+        return Response(
+            response=json.dumps(error, separators=(",", ":")),
+            mimetype="application/json",
+            status=400,
+        )
     else:
         thing = Thing(
             name=request.json["name"],
