@@ -30,7 +30,7 @@ class Thing(db.Model):
     )
     updated_at: so.Mapped[datetime] = so.mapped_column(sa.DateTime, index=True, nullable=True)
 
-    def __init__(self, name: str, colour: Colours, quantity: int) -> None:
+    def __init__(self, name: str, colour: str, quantity: int) -> None:
         self.name = name.title().strip()
         self.colour = colour
         self.quantity = quantity
