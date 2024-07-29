@@ -2,6 +2,7 @@ import json
 
 from app import app, db
 from app.models import Thing
+from sqlalchemy.exc import IntegrityError
 
 from flask import Response, request
 
@@ -16,17 +17,26 @@ def create_thing():
     )
 
     db.session.add(thing)
-    db.session.commit()
 
-    response = Response(
-        response=repr(thing),
-        mimetype="application/json",
-        status=201,
-    )
+    try:
+        db.session.commit()
+    except IntegrityError as e:
+        db.session.rollback()
+        return Response(status=400)
+    except Exception:
+        db.session.rollback()
+        return Response(status=500)
+    else:
+        response = Response(
+            response=repr(thing),
+            mimetype="application/json",
+            status=201,
+        )
 
-    response.headers["Location"] = f"{request.url}/{thing.id}"
-
-    return response
+        response.headers["Location"] = f"{request.url}/{thing.id}"
+        return response
+    finally:
+        db.session.close()
 
 
 @app.route("/v1/things", methods=["GET"])
