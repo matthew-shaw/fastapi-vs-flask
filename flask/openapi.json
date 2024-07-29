@@ -174,14 +174,14 @@
         }
       }
     },
-    "/things/{thing_id}": {
+    "/things/{id}": {
       "get": {
         "summary": "Retrieve a thing",
         "operationId": "get_thing",
         "tags": ["Thing"],
         "parameters": [
           {
-            "name": "thing_id",
+            "name": "id",
             "in": "path",
             "description": "ID of the thing to retrieve",
             "required": true,
@@ -217,7 +217,7 @@
         "tags": ["Thing"],
         "parameters": [
           {
-            "name": "thing_id",
+            "name": "id",
             "in": "path",
             "description": "ID of the thing to update",
             "required": true,
@@ -270,7 +270,7 @@
         "tags": ["Thing"],
         "parameters": [
           {
-            "name": "thing_id",
+            "name": "id",
             "in": "path",
             "description": "ID of the thing to delete",
             "required": true,
