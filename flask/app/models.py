@@ -30,15 +30,21 @@ class Thing(db.Model):
     )
     updated_at: so.Mapped[datetime] = so.mapped_column(sa.DateTime, index=True, nullable=True)
 
-    def to_dict(self) -> dict:
+    def __init__(self, name: str, colour: Colours, quantity: int) -> None:
+        self.name = name.title().strip()
+        self.colour = colour
+        self.quantity = quantity
+
+    def as_dict(self) -> dict:
+        """Return a dict representation of the class"""
         return {
             "id": self.id,
             "name": self.name,
             "colour": self.colour,
             "quantity": self.quantity,
             "created_at": self.created_at.isoformat(),
-            "updated_at": (self.updated_at.isoformat() if self.updated_at else None),
+            "updated_at": self.updated_at.isoformat if self.updated_at else None,
         }
 
     def __repr__(self) -> str:
-        return json.dumps(self.to_dict(), separators=(",", ":"))
+        return json.dumps(self.as_dict(), separators=(",", ":"))
