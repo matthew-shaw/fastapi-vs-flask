@@ -2,7 +2,7 @@ import json
 
 from app import app, db
 from app.models import Thing
-from jsonschema import FormatChecker, ValidationError, validate
+from jsonschema import ValidationError, validate
 from sqlalchemy.exc import IntegrityError
 
 from flask import Response, request
@@ -33,7 +33,7 @@ def create_thing():
 
     try:
         db.session.commit()
-    except IntegrityError as e:
+    except IntegrityError:
         db.session.rollback()
         return Response(status=400)
     except Exception:
