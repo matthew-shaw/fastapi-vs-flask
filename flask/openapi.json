@@ -168,6 +168,9 @@
           "406": {
             "description": "Not acceptable"
           },
+          "409": {
+            "description": "Conflict"
+          },
           "415": {
             "description": "Unsupported media type"
           }
@@ -258,6 +261,9 @@
           },
           "406": {
             "description": "Not acceptable"
+          },
+          "409": {
+            "description": "Conflict"
           },
           "415": {
             "description": "Unsupported media type"
