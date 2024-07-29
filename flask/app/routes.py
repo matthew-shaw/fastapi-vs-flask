@@ -2,19 +2,32 @@ import json
 
 from app import app, db
 from app.models import Thing
+from jsonschema import FormatChecker, ValidationError, validate
 from sqlalchemy.exc import IntegrityError
 
 from flask import Response, request
+
+# JSON schema for validation
+with open("openapi.json") as json_file:
+    openapi = json.load(json_file)
+thing_schema = openapi["components"]["schemas"]["ThingRequest"]
 
 
 @app.route("/v1/things", methods=["POST"])
 def create_thing():
     """Create a Thing"""
-    thing = Thing(
-        name=request.json["name"],
-        colour=request.json["colour"],
-        quantity=request.json["quantity"],
-    )
+
+    try:
+        validate(instance=request.json, schema=thing_schema)
+    except ValidationError as e:
+        error = {"message": e.message}
+        return Response(response=json.dumps(error, separators=(",", ":")), mimetype="application/json", status=400)
+    else:
+        thing = Thing(
+            name=request.json["name"],
+            colour=request.json["colour"],
+            quantity=request.json["quantity"],
+        )
 
     db.session.add(thing)
 

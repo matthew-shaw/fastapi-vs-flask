@@ -12,7 +12,7 @@ ENV FLASK_APP=flask_app.py \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-COPY flask_app.py config.py requirements.txt ./
+COPY flask_app.py config.py openapi.json requirements.txt ./
 RUN pip install -r requirements.txt
 
 COPY migrations migrations
