@@ -1,4 +1,5 @@
-POST http://localhost:5000/v1/things HTTP/1.1
+# Create a thing
+POST http://localhost:5000/v1/things
 content-type: application/json
 
 {
@@ -6,3 +7,30 @@ content-type: application/json
   "colour": "red",
   "quantity": 6
 }
+
+###
+
+# List things
+GET http://localhost:5000/v1/things
+
+###
+
+# Get a thing
+GET http://localhost:5000/v1/things/1
+
+###
+
+# Update a thing
+PUT http://localhost:5000/v1/things/1
+content-type: application/json
+
+{
+  "name": "Apple",
+  "colour": "green",
+  "quantity": 4
+}
+
+###
+
+# Delete a thing
+DELETE http://localhost:5000/v1/things/2
