@@ -66,3 +66,11 @@ def list_things():
         mimetype="application/json",
         status=200,
     )
+
+
+@app.route("/v1/things/<int:id>", methods=["GET"])
+def get_thing(id):
+    """Retrive a thing"""
+    thing = db.get_or_404(Thing, id)
+
+    return Response(response=repr(thing), mimetype="application/json", status=200)
