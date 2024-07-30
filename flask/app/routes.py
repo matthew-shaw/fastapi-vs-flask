@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timezone
 
 from app import app, db
 from app.models import Thing
@@ -14,7 +15,7 @@ thing_schema = openapi["components"]["schemas"]["ThingRequest"]
 
 
 @app.route("/v1/things", methods=["POST"])
-def create_thing():
+def create_thing() -> Response:
     """Create a Thing"""
 
     try:
@@ -32,14 +33,13 @@ def create_thing():
             colour=request.json["colour"],
             quantity=request.json["quantity"],
         )
-
-    db.session.add(thing)
+        db.session.add(thing)
 
     try:
         db.session.commit()
     except IntegrityError:
         db.session.rollback()
-        return Response(status=400)
+        return Response(status=409)
     except Exception:
         db.session.rollback()
         return Response(status=500)
@@ -57,7 +57,7 @@ def create_thing():
 
 
 @app.route("/v1/things", methods=["GET"])
-def list_things():
+def list_things() -> Response:
     """Retrieve a list of Things"""
     things = [thing.as_dict() for thing in db.session.execute(db.select(Thing).order_by(Thing.created_at)).scalars()]
 
@@ -69,8 +69,61 @@ def list_things():
 
 
 @app.route("/v1/things/<int:id>", methods=["GET"])
-def get_thing(id):
+def get_thing(id) -> Response:
     """Retrive a thing"""
     thing = db.get_or_404(Thing, id)
 
     return Response(response=repr(thing), mimetype="application/json", status=200)
+
+
+@app.route("/v1/things/<int:id>", methods=["PUT"])
+def update_thing(id) -> Response:
+    """Update a thing"""
+    try:
+        validate(instance=request.json, schema=thing_schema)
+    except ValidationError as e:
+        error = {"message": e.message}
+        return Response(
+            response=json.dumps(error, separators=(",", ":")),
+            mimetype="application/json",
+            status=400,
+        )
+    else:
+        thing = db.get_or_404(Thing, id)
+        thing.name = request.json["name"].title().strip()
+        thing.colour = request.json["colour"]
+        thing.quantity = request.json["quantity"]
+        thing.updated_at = datetime.now(timezone.utc)
+        db.session.add(thing)
+
+    try:
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return Response(status=409)
+    except Exception:
+        db.session.rollback()
+        return Response(status=500)
+    else:
+        return Response(
+            response=repr(thing),
+            mimetype="application/json",
+            status=200,
+        )
+
+
+@app.route("/v1/things/<int:id>", methods=["DELETE"])
+def delete_thing(id) -> Response:
+    """Delete a thing"""
+    thing = db.get_or_404(Thing, id)
+    db.session.delete(thing)
+
+    try:
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        return Response(status=500)
+    else:
+        return Response(status=204)
+    finally:
+        db.session.close()
