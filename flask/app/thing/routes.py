@@ -1,8 +1,9 @@
 import json
 from datetime import datetime, timezone
 
-from app import app, db
+from app import db
 from app.models import Thing
+from app.thing import bp
 from jsonschema import ValidationError, validate
 from sqlalchemy.exc import IntegrityError
 
@@ -14,7 +15,7 @@ with open("openapi.json") as json_file:
 thing_schema = openapi["components"]["schemas"]["ThingRequest"]
 
 
-@app.route("/v1/things", methods=["POST"])
+@bp.route("/things", methods=["POST"])
 def create_thing() -> Response:
     """Create a Thing"""
 
@@ -56,7 +57,7 @@ def create_thing() -> Response:
         db.session.close()
 
 
-@app.route("/v1/things", methods=["GET"])
+@bp.route("/things", methods=["GET"])
 def list_things() -> Response:
     """Retrieve a list of Things"""
     things = [thing.as_dict() for thing in db.session.execute(db.select(Thing).order_by(Thing.created_at)).scalars()]
@@ -68,7 +69,7 @@ def list_things() -> Response:
     )
 
 
-@app.route("/v1/things/<int:id>", methods=["GET"])
+@bp.route("/things/<int:id>", methods=["GET"])
 def get_thing(id) -> Response:
     """Retrive a thing"""
     thing = db.get_or_404(Thing, id)
@@ -80,7 +81,7 @@ def get_thing(id) -> Response:
     )
 
 
-@app.route("/v1/things/<int:id>", methods=["PUT"])
+@bp.route("/things/<int:id>", methods=["PUT"])
 def update_thing(id) -> Response:
     """Update a thing"""
     try:
@@ -116,7 +117,7 @@ def update_thing(id) -> Response:
         )
 
 
-@app.route("/v1/things/<int:id>", methods=["DELETE"])
+@bp.route("/things/<int:id>", methods=["DELETE"])
 def delete_thing(id) -> Response:
     """Delete a thing"""
     thing = db.get_or_404(Thing, id)

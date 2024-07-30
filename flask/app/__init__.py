@@ -4,9 +4,22 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flask import Flask
 
-app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+db = SQLAlchemy()
+migrate = Migrate()
 
-from app import models, routes
+
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(Config)
+
+    db.init_app(app)
+    migrate.init_app(app, db)
+
+    from app.thing import bp as thing_bp
+
+    app.register_blueprint(thing_bp, url_prefix="/v1")
+
+    return app
+
+
+from app import models  # noqa: F401, E402
