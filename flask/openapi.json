@@ -31,8 +31,8 @@
   "paths": {
     "/things": {
       "get": {
-        "summary": "Retrieve a list of things",
-        "operationId": "list_things",
+        "summary": "Get a list of Things",
+        "operationId": "list",
         "tags": ["Thing"],
         "parameters": [
           {
@@ -125,8 +125,8 @@
         }
       },
       "post": {
-        "summary": "Create a thing",
-        "operationId": "create_thing",
+        "summary": "Create a Thing",
+        "operationId": "create",
         "tags": ["Thing"],
         "requestBody": {
           "description": "New thing data to create",
@@ -179,8 +179,8 @@
     },
     "/things/{id}": {
       "get": {
-        "summary": "Retrieve a thing",
-        "operationId": "get_thing",
+        "summary": "Get a Thing",
+        "operationId": "get",
         "tags": ["Thing"],
         "parameters": [
           {
@@ -215,8 +215,8 @@
         }
       },
       "put": {
-        "summary": "Update a thing",
-        "operationId": "update_thing",
+        "summary": "Update a Thing",
+        "operationId": "update",
         "tags": ["Thing"],
         "parameters": [
           {
@@ -271,8 +271,8 @@
         }
       },
       "delete": {
-        "summary": "Delete a thing",
-        "operationId": "delete_thing",
+        "summary": "Delete a Thing",
+        "operationId": "delete",
         "tags": ["Thing"],
         "parameters": [
           {

@@ -16,9 +16,8 @@ thing_schema = openapi["components"]["schemas"]["ThingRequest"]
 
 
 @bp.route("/things", methods=["POST"])
-def create_thing() -> Response:
+def create() -> Response:
     """Create a Thing"""
-
     try:
         validate(instance=request.json, schema=thing_schema)
     except ValidationError as e:
@@ -51,15 +50,15 @@ def create_thing() -> Response:
             status=201,
         )
 
-        response.headers["Location"] = url_for("thing.get_thing", id=thing.id)
+        response.headers["Location"] = url_for("thing.get", id=thing.id)
         return response
     finally:
         db.session.close()
 
 
 @bp.route("/things", methods=["GET"])
-def list_things() -> Response:
-    """Retrieve a list of Things"""
+def list() -> Response:
+    """Get a list of Things"""
     things = [thing.as_dict() for thing in db.session.execute(db.select(Thing).order_by(Thing.created_at)).scalars()]
 
     return Response(
@@ -70,8 +69,8 @@ def list_things() -> Response:
 
 
 @bp.route("/things/<int:id>", methods=["GET"])
-def get_thing(id) -> Response:
-    """Retrive a thing"""
+def get(id) -> Response:
+    """Get a thing"""
     thing = db.get_or_404(Thing, id)
 
     return Response(
@@ -82,7 +81,7 @@ def get_thing(id) -> Response:
 
 
 @bp.route("/things/<int:id>", methods=["PUT"])
-def update_thing(id) -> Response:
+def update(id) -> Response:
     """Update a thing"""
     try:
         validate(instance=request.json, schema=thing_schema)
@@ -118,7 +117,7 @@ def update_thing(id) -> Response:
 
 
 @bp.route("/things/<int:id>", methods=["DELETE"])
-def delete_thing(id) -> Response:
+def delete(id) -> Response:
     """Delete a thing"""
     thing = db.get_or_404(Thing, id)
     db.session.delete(thing)
