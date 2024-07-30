@@ -7,7 +7,7 @@ from app.thing import bp
 from jsonschema import ValidationError, validate
 from sqlalchemy.exc import IntegrityError
 
-from flask import Response, request
+from flask import Response, request, url_for
 
 # JSON schema for validation
 with open("openapi.json") as json_file:
@@ -51,7 +51,7 @@ def create_thing() -> Response:
             status=201,
         )
 
-        response.headers["Location"] = f"{request.url}/{thing.id}"
+        response.headers["Location"] = url_for("thing.get_thing", id=thing.id)
         return response
     finally:
         db.session.close()
