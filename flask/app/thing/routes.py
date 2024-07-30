@@ -6,6 +6,7 @@ from app.models import Thing
 from app.thing import bp
 from jsonschema import ValidationError, validate
 from sqlalchemy.exc import IntegrityError
+from werkzeug.exceptions import BadRequest, Conflict, HTTPException, InternalServerError
 
 from flask import Response, request, url_for
 
@@ -21,12 +22,7 @@ def create() -> Response:
     try:
         validate(instance=request.json, schema=thing_schema)
     except ValidationError as e:
-        error = {"message": e.message}
-        return Response(
-            response=json.dumps(error, separators=(",", ":")),
-            mimetype="application/json",
-            status=400,
-        )
+        raise BadRequest(description=e.message)
     else:
         thing = Thing(
             name=request.json["name"],
@@ -39,10 +35,10 @@ def create() -> Response:
         db.session.commit()
     except IntegrityError:
         db.session.rollback()
-        return Response(status=409)
+        raise Conflict()
     except Exception:
         db.session.rollback()
-        return Response(status=500)
+        raise InternalServerError()
     else:
         response = Response(
             response=repr(thing),
@@ -86,12 +82,7 @@ def update(id) -> Response:
     try:
         validate(instance=request.json, schema=thing_schema)
     except ValidationError as e:
-        error = {"message": e.message}
-        return Response(
-            response=json.dumps(error, separators=(",", ":")),
-            mimetype="application/json",
-            status=400,
-        )
+        raise BadRequest(description=e.message)
     else:
         thing = db.get_or_404(Thing, id)
         thing.name = request.json["name"].title().strip()
@@ -104,10 +95,10 @@ def update(id) -> Response:
         db.session.commit()
     except IntegrityError:
         db.session.rollback()
-        return Response(status=409)
+        raise Conflict()
     except Exception:
         db.session.rollback()
-        return Response(status=500)
+        raise InternalServerError()
     else:
         return Response(
             response=repr(thing),
@@ -126,8 +117,27 @@ def delete(id) -> Response:
         db.session.commit()
     except Exception:
         db.session.rollback()
-        return Response(status=500)
+        raise InternalServerError()
     else:
         return Response(status=204)
     finally:
         db.session.close()
+
+
+@bp.app_errorhandler(HTTPException)
+def http_error(error):
+    return Response(
+        response=json.dumps(
+            {"name": error.name, "description": error.description},
+            separators=(",", ":"),
+        ),
+        mimetype="application/json",
+        status=error.code,
+    )
+
+
+@bp.app_errorhandler(Exception)
+def unhandled_exception(error):
+    db.session.rollback()
+    db.session.close()
+    raise InternalServerError()
