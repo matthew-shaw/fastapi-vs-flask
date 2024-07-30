@@ -73,7 +73,11 @@ def get_thing(id) -> Response:
     """Retrive a thing"""
     thing = db.get_or_404(Thing, id)
 
-    return Response(response=repr(thing), mimetype="application/json", status=200)
+    return Response(
+        response=repr(thing),
+        mimetype="application/json",
+        status=200,
+    )
 
 
 @app.route("/v1/things/<int:id>", methods=["PUT"])
