@@ -46,7 +46,7 @@ markupsafe==2.1.5
     #   werkzeug
 packaging==24.1
     # via gunicorn
-psycopg2==2.9.9
+psycopg==3.2.1
     # via -r flask/requirements.in
 referencing==0.35.1
     # via
@@ -63,6 +63,7 @@ sqlalchemy==2.0.31
 typing-extensions==4.12.2
     # via
     #   alembic
+    #   psycopg
     #   sqlalchemy
 werkzeug==3.0.3
     # via flask

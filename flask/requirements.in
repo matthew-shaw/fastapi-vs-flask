@@ -3,4 +3,4 @@ flask-migrate
 flask-sqlalchemy
 gunicorn
 jsonschema
-psycopg2
+psycopg
