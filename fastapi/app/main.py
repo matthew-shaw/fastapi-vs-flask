@@ -26,8 +26,13 @@ class Item(BaseModel):
 app = FastAPI()
 
 
-@app.post("/items/", status_code=201)
-async def create_item(item: Item) -> dict:
+@app.post(
+    "/items/",
+    status_code=201,
+    tags=["Item"],
+)
+async def create(item: Item) -> dict:
+    """Create an Item"""
     item_dict = item.dict()
     if item.tax:
         price_with_tax = item.price + item.tax
@@ -35,13 +40,18 @@ async def create_item(item: Item) -> dict:
     return item_dict
 
 
-@app.get("/items/{item_id}")
-async def read_item(item_id: int, q: str | None = None) -> dict:
+@app.get("/items/{item_id}", tags=["Item"])
+async def get(item_id: int, q: str | None = None) -> dict:
+    """Get an Item"""
     if q:
         return {"item_id": item_id, "q": q}
     return {"item_id": item_id}
 
 
-@app.put("/items/{item_id}")
-async def update_item(item_id: int, item: Item) -> dict:
+@app.put(
+    "/items/{item_id}",
+    tags=["Item"],
+)
+async def update(item_id: int, item: Item) -> dict:
+    """Update an Item"""
     return {"item_id": item_id, **item.dict()}
