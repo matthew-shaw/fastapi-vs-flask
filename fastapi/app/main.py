@@ -9,6 +9,19 @@ class Item(BaseModel):
     price: float
     tax: float | None = None
 
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "name": "Foo",
+                    "description": "A very nice Item",
+                    "price": 12.3,
+                    "tax": 1.23,
+                }
+            ]
+        }
+    }
+
 
 app = FastAPI()
 
