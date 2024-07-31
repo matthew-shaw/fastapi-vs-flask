@@ -18,7 +18,9 @@ async def root():
 
 @app.get("/items/{item_id}")
 async def read_item(item_id: int, q: str | None = None):
-    return {"item_id": item_id, "q": q}
+    if q:
+        return {"item_id": item_id, "q": q}
+    return {"item_id": item_id}
 
 
 @app.put("/items/{item_id}")
