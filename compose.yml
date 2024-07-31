@@ -1,47 +1,51 @@
 services:
-  # fastapi:
-  #   build: ./fastapi
-  #   command: fastapi run
-  #   ports:
-  #     - 8000:8000
-  #   networks:
-  #     - fastapi-network
-  #   depends_on:
-  #     - fastapi-db
-  # fastapi-db:
-  #   image: postgres:16-alpine
-  #   restart: always
-  #   ports:
-  #     - 5432:5432
-  #   networks:
-  #     - fastapi-network
-  #   environment:
-  #     POSTGRES_USER: db_user
-  #     POSTGRES_PASSWORD: db_password
-  #     POSTGRES_DB: experiment
-  flask:
-    build: ./flask
-    command: gunicorn -b :5000 --access-logfile - --error-logfile - flask_app:app
-    stop_signal: SIGINT
+  fastapi:
+    container_name: fastapi-app
+    build: ./fastapi
+    command: fastapi run
     ports:
-      - 5000:5000
+      - 8000:8000
     networks:
-      - flask-network
+      - fastapi-network
     depends_on:
-      - flask-db
-    environment:
-      - DATABASE_URL=postgresql+psycopg://db_user:db_password@flask-db:5432/experiment
-  flask-db:
+      - fastapi-db
+  fastapi-db:
+    container_name: fastapi-db
     image: postgres:16-alpine
     restart: always
     ports:
       - 5432:5432
     networks:
-      - flask-network
+      - fastapi-network
     environment:
       POSTGRES_USER: db_user
       POSTGRES_PASSWORD: db_password
       POSTGRES_DB: experiment
+  # flask:
+  #   container_name: flask-app
+  #   build: ./flask
+  #   command: gunicorn -b :5000 --access-logfile - --error-logfile - flask_app:app
+  #   stop_signal: SIGINT
+  #   ports:
+  #     - 5000:5000
+  #   networks:
+  #     - flask-network
+  #   depends_on:
+  #     - flask-db
+  #   environment:
+  #     - DATABASE_URL=postgresql+psycopg://db_user:db_password@flask-db:5432/experiment
+  # flask-db:
+  #   container_name: flask-db
+  #   image: postgres:16-alpine
+  #   restart: always
+  #   ports:
+  #     - 5432:5432
+  #   networks:
+  #     - flask-network
+  #   environment:
+  #     POSTGRES_USER: db_user
+  #     POSTGRES_PASSWORD: db_password
+  #     POSTGRES_DB: experiment
 networks:
-  # fastapi-network:
-  flask-network:
+  fastapi-network:
+  # flask-network:
