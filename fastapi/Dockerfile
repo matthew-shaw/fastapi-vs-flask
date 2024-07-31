@@ -8,8 +8,11 @@ WORKDIR /home/appuser
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-COPY main.py requirements.txt ./
-RUN pip install -r requirements.txt \
-    && chown -R appuser:appuser ./
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
+
+COPY app app
+
+RUN chown -R appuser:appuser ./
 
 USER appuser

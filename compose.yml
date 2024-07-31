@@ -1,7 +1,7 @@
 services:
   fastapi:
     build: ./fastapi
-    command: fastapi run main.py
+    command: fastapi run
     ports:
       - 8000:8000
     networks:
