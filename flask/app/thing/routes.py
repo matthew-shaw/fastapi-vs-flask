@@ -128,7 +128,10 @@ def delete(id) -> Response:
 def http_error(error):
     return Response(
         response=json.dumps(
-            {"name": error.name, "description": error.description},
+            {
+                "name": error.name,
+                "description": error.description,
+            },
             separators=(",", ":"),
         ),
         mimetype="application/json",
