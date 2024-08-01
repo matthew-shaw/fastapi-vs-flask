@@ -5,7 +5,7 @@ RUN useradd appuser
 WORKDIR /home/appuser
 
 RUN apt-get update && \
-    apt-get install -y libpq-dev gcc
+    apt-get install -y libpq-dev
 
 # Set environment variables
 ENV FLASK_APP=flask_app.py \
