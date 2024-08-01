@@ -4,6 +4,8 @@
 #
 #    pip-compile fastapi/requirements.in
 #
+alembic==1.13.2
+    # via -r fastapi/requirements.in
 annotated-types==0.7.0
     # via pydantic
 anyio==4.4.0
@@ -46,10 +48,14 @@ idna==3.7
     #   httpx
 jinja2==3.1.4
     # via fastapi
+mako==1.3.5
+    # via alembic
 markdown-it-py==3.0.0
     # via rich
 markupsafe==2.1.5
-    # via jinja2
+    # via
+    #   jinja2
+    #   mako
 mdurl==0.1.2
     # via markdown-it-py
 pydantic==2.8.2
@@ -73,13 +79,16 @@ sniffio==1.3.1
     #   anyio
     #   httpx
 sqlalchemy==2.0.31
-    # via -r fastapi/requirements.in
+    # via
+    #   -r fastapi/requirements.in
+    #   alembic
 starlette==0.37.2
     # via fastapi
 typer==0.12.3
     # via fastapi-cli
 typing-extensions==4.12.2
     # via
+    #   alembic
     #   fastapi
     #   pydantic
     #   pydantic-core
