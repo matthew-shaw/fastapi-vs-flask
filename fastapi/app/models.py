@@ -1,21 +1,10 @@
-from pydantic import BaseModel
+from app.database import Base
+from sqlalchemy import Column, Integer, String
 
 
-class Item(BaseModel):
-    name: str
-    description: str | None = None
-    price: float
-    tax: float | None = None
+class Item(Base):
+    __tablename__ = "items"
 
-    model_config = {
-        "json_schema_extra": {
-            "examples": [
-                {
-                    "name": "Foo",
-                    "description": "A very nice Item",
-                    "price": 12.3,
-                    "tax": 1.23,
-                }
-            ]
-        }
-    }
+    id = Column(Integer, primary_key=True)
+    title = Column(String, index=True)
+    description = Column(String, index=True)

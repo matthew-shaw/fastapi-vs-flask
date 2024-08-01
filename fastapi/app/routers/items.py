@@ -1,32 +1,26 @@
-from app.models import Item
+from app import crud, schemas
+from app.dependencies import get_db
+from sqlalchemy.orm import Session
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-router = APIRouter(prefix="/items", tags=["Items"])
-
-
-@router.post(
-    "/",
-    status_code=201,
+router = APIRouter(
+    prefix="/items",
+    tags=["Items"],
+    dependencies=[Depends(get_db)],
 )
-async def create(item: Item) -> dict:
-    """Create an Item"""
-    item_dict = item.dict()
-    if item.tax:
-        price_with_tax = item.price + item.tax
-        item_dict.update({"price_with_tax": price_with_tax})
-    return item_dict
 
 
-@router.get("/{item_id}")
-async def get(item_id: int, q: str | None = None) -> dict:
-    """Get an Item"""
-    if q:
-        return {"item_id": item_id, "q": q}
-    return {"item_id": item_id}
+@router.post("/", response_model=schemas.Item)
+def create_item(item: schemas.ItemCreate, db: Session = Depends(get_db)):
+    return crud.create_item(db, item=item)
 
 
-@router.put("/{item_id}")
-async def update(item_id: int, item: Item) -> dict:
-    """Update an Item"""
-    return {"item_id": item_id, **item.dict()}
+@router.get("/", response_model=list[schemas.Item])
+def read_items(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+):
+    items = crud.get_items(db, skip=skip, limit=limit)
+    return items
