@@ -10,7 +10,7 @@ services:
     depends_on:
       - fastapi-db
     environment:
-      - DATABASE_URL=postgresql://db_user:db_password@fastapi-db:5432/experiment
+      - DATABASE_URL=postgresql+psycopg://db_user:db_password@fastapi-db:5432/experiment
   fastapi-db:
     container_name: fastapi-db
     image: postgres:16-alpine

@@ -58,6 +58,8 @@ markupsafe==2.1.5
     #   mako
 mdurl==0.1.2
     # via markdown-it-py
+psycopg==3.2.1
+    # via -r fastapi/requirements.in
 pydantic==2.8.2
     # via fastapi
 pydantic-core==2.20.1
@@ -90,6 +92,7 @@ typing-extensions==4.12.2
     # via
     #   alembic
     #   fastapi
+    #   psycopg
     #   pydantic
     #   pydantic-core
     #   sqlalchemy
