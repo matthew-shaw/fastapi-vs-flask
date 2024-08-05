@@ -1,36 +1,36 @@
 # Create a thing
-POST http://localhost:5000/v1/things
+POST http://localhost:6000/v1/things
 content-type: application/json
 
 {
-  "name": "Apple",
+  "name": "{{$guid}}",
   "colour": "red",
-  "quantity": 6
+  "quantity": {{$randomInt 0 100}}
 }
 
 ###
 
 # List things
-GET http://localhost:5000/v1/things
+GET http://localhost:6000/v1/things
 
 ###
 
 # Get a thing
-GET http://localhost:5000/v1/things/1
+GET http://localhost:6000/v1/things/1
 
 ###
 
 # Update a thing
-PUT http://localhost:5000/v1/things/1
+PUT http://localhost:6000/v1/things/1
 content-type: application/json
 
 {
-  "name": "Apple",
+  "name": "{{$guid}}",
   "colour": "green",
-  "quantity": 4
+  "quantity": {{$randomInt 0 100}}
 }
 
 ###
 
 # Delete a thing
-DELETE http://localhost:5000/v1/things/2
+DELETE http://localhost:6000/v1/things/2
