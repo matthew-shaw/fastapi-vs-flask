@@ -25,9 +25,9 @@ dnspython==2.6.1
     # via email-validator
 email-validator==2.2.0
     # via fastapi
-fastapi==0.111.1
+fastapi[standard]==0.112.0
     # via -r fastapi/requirements.in
-fastapi-cli==0.0.4
+fastapi-cli[standard]==0.0.5
     # via fastapi
 greenlet==3.0.3
     # via sqlalchemy
@@ -97,8 +97,10 @@ typing-extensions==4.12.2
     #   pydantic-core
     #   sqlalchemy
     #   typer
-uvicorn[standard]==0.30.4
-    # via fastapi
+uvicorn[standard]==0.30.5
+    # via
+    #   fastapi
+    #   fastapi-cli
 uvloop==0.19.0
     # via uvicorn
 watchfiles==0.22.0

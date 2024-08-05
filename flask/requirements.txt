@@ -6,7 +6,7 @@
 #
 alembic==1.13.2
     # via flask-migrate
-attrs==23.2.0
+attrs==24.1.0
     # via
     #   jsonschema
     #   referencing
