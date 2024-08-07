@@ -26,7 +26,7 @@ services:
   # flask:
   #   container_name: flask-app
   #   build: ./flask
-  #   command: gunicorn -b :6000 --access-logfile - --error-logfile - flask_app:app
+  #   command: gunicorn -b :6000 -w 4 --access-logfile - --error-logfile - flask_app:app
   #   stop_signal: SIGINT
   #   ports:
   #     - 6000:6000
