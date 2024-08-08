@@ -6,7 +6,7 @@
 #
 alembic==1.13.2
     # via flask-migrate
-attrs==24.1.0
+attrs==24.2.0
     # via
     #   jsonschema
     #   referencing
@@ -52,11 +52,11 @@ referencing==0.35.1
     # via
     #   jsonschema
     #   jsonschema-specifications
-rpds-py==0.19.1
+rpds-py==0.20.0
     # via
     #   jsonschema
     #   referencing
-sqlalchemy==2.0.31
+sqlalchemy==2.0.32
     # via
     #   alembic
     #   flask-sqlalchemy
