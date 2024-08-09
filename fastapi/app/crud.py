@@ -2,6 +2,10 @@ from app import models, schemas
 from sqlalchemy.orm import Session
 
 
+def get_item(db: Session, item_id: int) -> models.Item | None:
+    return db.query(models.Item).filter(models.Item.id == item_id).first()
+
+
 def get_items(db: Session, skip: int = 0, limit: int = 100) -> list[models.Item]:
     return db.query(models.Item).offset(skip).limit(limit).all()
 
