@@ -29,6 +29,8 @@ fastapi-cli[standard]==0.0.5
     # via fastapi
 greenlet==3.0.3
     # via sqlalchemy
+gunicorn==23.0.0
+    # via -r fastapi/requirements.in
 h11==0.14.0
     # via
     #   httpcore
@@ -56,6 +58,8 @@ markupsafe==2.1.5
     #   mako
 mdurl==0.1.2
     # via markdown-it-py
+packaging==24.1
+    # via gunicorn
 psycopg2==2.9.9
     # via -r fastapi/requirements.in
 pydantic==1.10.17
