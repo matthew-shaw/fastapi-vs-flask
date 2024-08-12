@@ -2,7 +2,7 @@ services:
   fastapi:
     container_name: fastapi-app
     build: ./fastapi
-    command: fastapi run
+    command: gunicorn app.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind :8000
     ports:
       - 8000:8000
     networks:
